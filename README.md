@@ -1,13 +1,57 @@
 
-# Project location 
+
+# Create Zephyr WorkSpace 
+========================
+Install west:
+``` Bash
+
+pip3 install -U west
 
 ```
-tree -Lh 1
-.
-├── [4.0K]  bootloader 
-├── [4.0K]  build
-├── [4.0K]  modules
-├── [4.0K]  personal ----> your repo
-├── [4.0K]  tools
-└── [4.0K]  zephyr
+Get the Zephyr source code:
+``` Bash
+west init ~/zephyrproject
+cd ~/zephyrproject
+west update
+```
+Export a Zephyr CMake package. This allows CMake to automatically load boilerplate code required for building Zephyr applications.
+
+```Bash
+west zephyr-export
+```
+
+Zephyr’s scripts/requirements.txt file declares additional Python dependencies. Install them with pip3.
+```
+pip3 install -r ~/zephyrproject/zephyr/scripts/requirements.txt
+```
+
+After, i will see the folder zephyrproject with file  tree as below:
+
+![Alt Text](image/1.init.png)
+# Create Your Application
+========================
+
+``` Bash
+
+cd  ~/zephyproject
+mkdir personal
+
+```
+
+![Alt Text](image/2.createproject.png)
+
+Add some file to make it become a basic CMake Project
+
+With me, I create a personal project and create a **addition** folder esp32s3 to make project for **esp32s3**, If you have not more project, can you create a basic project within personal folder
+
+![Alt Text](image/3.make_basic.png)
+
+Build
+
+Run this command to build your application
+
+```
+cd ~/zephyrproject
+west build -b [your board name] ./personal/esp32s3
+
 ```
