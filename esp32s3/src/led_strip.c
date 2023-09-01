@@ -18,9 +18,6 @@ LOG_MODULE_REGISTER(led_strip);
 #include <zephyr/sys/util.h>
 #include <zephyr/types.h>
 
-#define LOG_LEVEL 4
-#include <zephyr/logging/log.h>
-
 static const struct led_rgb	colors[] = {
 	RGB(0x0f, 0x00, 0x00), /* red */
 	RGB(0x00, 0x0f, 0x00), /* green */

@@ -2,11 +2,10 @@
 
 cmake_minimum_required(VERSION 3.20.0)
 
-message($ENV{ZEPHYR_BASE})
 find_package(Zephyr REQUIRED HINTS $ENV{ZEPHYR_BASE})
 project(zephyr_esp32)
 
 include_directories(include)
 FILE(GLOB app_sources src/*.c)
+message("app_sources: ${app_sources}")
 target_sources(app PRIVATE ${app_sources})
-

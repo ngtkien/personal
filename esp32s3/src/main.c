@@ -40,7 +40,6 @@ LOG_MODULE_REGISTER(main);
 
 
 
-
 int	main(void)
 {
 	// int	err;
@@ -48,8 +47,8 @@ int	main(void)
 
 	led_strip_init();
 	bluetooth_init(); // Call the bluetooth_init() function
-
-	// counter = 0;
+	bluetooth_mess();
+	counter = 0;
 	/* Implement notification. At the moment there is no suitable way
 		* of starting delayed work so we do it here
 		*/
@@ -59,6 +58,7 @@ int	main(void)
 		if (counter == 50)
 		{
 			counter = 0;
+
 			led_strip_demo();
 		}
 		/* Heartrate measurements simulation */

@@ -1,20 +1,7 @@
 
-#include <errno.h>
-#include <stddef.h>
-#include <string.h>
-#include <zephyr/bluetooth/bluetooth.h>
-#include <zephyr/bluetooth/conn.h>
-#include <zephyr/bluetooth/gatt.h>
-#include <zephyr/bluetooth/hci.h>
-#include <zephyr/bluetooth/services/bas.h>
-#include <zephyr/bluetooth/services/hrs.h>
-#include <zephyr/bluetooth/uuid.h>
-#include <zephyr/kernel.h>
-#include <zephyr/sys/byteorder.h>
-#include <zephyr/sys/printk.h>
-#include <zephyr/sys/util.h>
-#include <zephyr/types.h>
-#include "bluetooth_adv.h" // Include the bluetooth.h header file
+
+
+#include "bluetooth_adv.h"
 static const struct bt_data		ad[] = {BT_DATA_BYTES(BT_DATA_FLAGS,
 			(BT_LE_AD_GENERAL | BT_LE_AD_NO_BREDR)),
 			BT_DATA_BYTES(BT_DATA_UUID16_ALL,
@@ -70,7 +57,7 @@ static struct bt_conn_auth_cb	auth_cb_display = {
 	.cancel = auth_cancel,
 };
 
-static void	bas_notify(void)
+void bas_notify()
 {
 	uint8_t	battery_level;
 
@@ -83,7 +70,7 @@ static void	bas_notify(void)
 	bt_bas_set_battery_level(battery_level);
 }
 
-static void	hrs_notify(void)
+void hrs_notify()
 {
 	static uint8_t	heartrate;
 
@@ -96,19 +83,20 @@ static void	hrs_notify(void)
 	}
 	bt_hrs_notify(heartrate);
 }
-// ...
+
 void bluetooth_init()
 {
     int err;
     // Bluetooth initialization code
-    // ...
     err = bt_enable(NULL);
 	if (err)
 	{
 		printk("Bluetooth init failed (err %d)\n", err);
-		return (0);
+		return;
 	}
 	bt_ready();
 	bt_conn_auth_cb_register(&auth_cb_display);
 }
-// ...
+void bluetooth_mess(){
+	printk("Bluetooth ok\n");
+}
