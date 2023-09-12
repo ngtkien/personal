@@ -20,14 +20,19 @@ static struct bt_uuid_128 custom_characteristic_uuid = BT_UUID_INIT_128(
 
 
 
-/* Custom Service Variables */
+/* Zeder Custom Service Variables */
 #define BT_UUID_ZEDER_SERVICE_VAL \
-	BT_UUID_128_ENCODE(0x12345678, 0x1234, 0x5678, 0x1234, 0x56789abcded0)
+	BT_UUID_128_ENCODE(0x02011995, 0x0201, 0x1995, 0x2808, 0x56789abcded0)
 
-static struct bt_uuid_128 zeder_service_uuid = BT_UUID_INIT_128(
+static struct bt_uuid_128 zproject_service_uuid = BT_UUID_INIT_128(
 	BT_UUID_ZEDER_SERVICE_VAL);
-static struct bt_uuid_128 zeder_read_characteristic_uuid = BT_UUID_INIT_128(
-	BT_UUID_128_ENCODE(0x12345678, 0x1234, 0x5678, 0x1234, 0x56789abcded1));
+static struct bt_uuid_128 zproject_read_characteristic_uuid = BT_UUID_INIT_128(
+	BT_UUID_128_ENCODE(0x02011995, 0x0201, 0x1995, 0x2808, 0x56789abcded1));
+static struct bt_uuid_128 zproject_write_characteristic_uuid = BT_UUID_INIT_128(
+	BT_UUID_128_ENCODE(0x02011995, 0x0201, 0x1995, 0x2808, 0x56789abcded1));
+static struct bt_uuid_128 zproject_notity_characteristic_uuid = BT_UUID_INIT_128(
+	BT_UUID_128_ENCODE(0x02011995, 0x0201, 0x1995, 0x2808, 0x56789abcded1));
+
 
 static int signed_value;
 static struct bt_le_adv_param adv_param;
@@ -75,8 +80,8 @@ BT_GATT_SERVICE_DEFINE(primary_service,
 					read_signed,NULL,NULL),
 );
 
-BT_GATT_SERVICE_DEFINE(zeder_service,
-	BT_GATT_PRIMARY_SERVICE(&zeder_service_uuid),
+BT_GATT_SERVICE_DEFINE(zservice,
+	BT_GATT_PRIMARY_SERVICE(&zervice_uuid),
 	BT_GATT_CHARACTERISTIC(&zeder_read_characteristic_uuid.uuid,
 			       BT_GATT_CHRC_READ,
 			       BT_GATT_PERM_READ,
