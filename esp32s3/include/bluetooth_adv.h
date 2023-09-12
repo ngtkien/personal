@@ -15,9 +15,11 @@
 #include <zephyr/sys/printk.h>
 #include <zephyr/sys/util.h>
 #include <zephyr/types.h>
-
+#include <zephyr/settings/settings.h>
+#include <zephyr/sys/reboot.h>
 void bluetooth_init();
 void bluetooth_mess();
 void bas_notify();
 void hrs_notify();
+void tank_notify();
 
