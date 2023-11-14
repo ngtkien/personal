@@ -2,6 +2,7 @@
 
 
 #include "bluetooth_adv.h"
+static int count = 0;
 /* Custom Service Variables */
 #define BT_UUID_CUSTOM_SERVICE_VAL \
 	BT_UUID_128_ENCODE(0x12345678, 0x1234, 0x5678, 0x1234, 0x56789abcdef0)
@@ -9,30 +10,33 @@
 static struct bt_uuid_128 primary_service_uuid = BT_UUID_INIT_128(
 	BT_UUID_CUSTOM_SERVICE_VAL);
 
-static struct bt_uuid_128 read_characteristic_uuid = BT_UUID_INIT_128(
+static struct bt_uuid_128 read_charac_uuid = BT_UUID_INIT_128(
 	BT_UUID_128_ENCODE(0x12345678, 0x1234, 0x5678, 0x1234, 0x56789abcdef1));
 
-static struct bt_uuid_128 write_characteristic_uuid = BT_UUID_INIT_128(
+static struct bt_uuid_128 write_charac_uuid = BT_UUID_INIT_128(
 	BT_UUID_128_ENCODE(0x12345678, 0x1234, 0x5678, 0x1234, 0x56789abcdef2));
 
-static struct bt_uuid_128 custom_characteristic_uuid = BT_UUID_INIT_128(
+static struct bt_uuid_128 custom_charac_uuid = BT_UUID_INIT_128(
 	BT_UUID_128_ENCODE(0x12345678, 0x1234, 0x5678, 0x1234, 0x56789abcdef3));
 
 
 
 /* Zeder Custom Service Variables */
 #define BT_UUID_ZEDER_SERVICE_VAL \
-	BT_UUID_128_ENCODE(0x02011995, 0x0201, 0x1995, 0x2808, 0x56789abcded0)
+	BT_UUID_128_ENCODE(0x02011995, 0x0201, 0x1995, 0x2808, 0xb92a4f188fd0)
 
 static struct bt_uuid_128 zproject_service_uuid = BT_UUID_INIT_128(
 	BT_UUID_ZEDER_SERVICE_VAL);
-static struct bt_uuid_128 zproject_read_characteristic_uuid = BT_UUID_INIT_128(
-	BT_UUID_128_ENCODE(0x02011995, 0x0201, 0x1995, 0x2808, 0x56789abcded1));
-static struct bt_uuid_128 zproject_write_characteristic_uuid = BT_UUID_INIT_128(
-	BT_UUID_128_ENCODE(0x02011995, 0x0201, 0x1995, 0x2808, 0x56789abcded1));
-static struct bt_uuid_128 zproject_notity_characteristic_uuid = BT_UUID_INIT_128(
-	BT_UUID_128_ENCODE(0x02011995, 0x0201, 0x1995, 0x2808, 0x56789abcded1));
 
+
+static struct bt_uuid_128 zproject_read_charac_uuid = BT_UUID_INIT_128(
+	BT_UUID_128_ENCODE(0x02011995, 0x0201, 0x1995, 0x2808, 0xb92a4f188fd1));
+static struct bt_uuid_128 zproject_write_charac_uuid = BT_UUID_INIT_128(
+	BT_UUID_128_ENCODE(0x02011995, 0x0201, 0x1995, 0x2808, 0xb92a4f188fd2));
+static struct bt_uuid_128 zproject_notify_charac_uuid = BT_UUID_INIT_128(
+	BT_UUID_128_ENCODE(0x02011995, 0x0201, 0x1995, 0x2808, 0xb92a4f188fd3));
+static struct bt_uuid_128 zproject_indicate_charac_uuid = BT_UUID_INIT_128(
+	BT_UUID_128_ENCODE(0x02011995, 0x0201, 0x1995, 0x2808, 0xb92a4f188fd4));
 
 static int signed_value;
 static struct bt_le_adv_param adv_param;
@@ -42,8 +46,10 @@ static ssize_t read_signed(struct bt_conn *conn, const struct bt_gatt_attr *attr
 			   void *buf, uint16_t len, uint16_t offset)
 {
 	int *value = &signed_value;
+	count++;
+	*value = count;
+	printk("Reading signed value\n,value: %d, offset: %d, len: %d\n",*value, offset, len);
 
-	printk("Reading signed value\n");
 	return bt_gatt_attr_read(conn, attr, buf, len, offset, value,
 				 sizeof(signed_value));
 }
@@ -57,35 +63,47 @@ static ssize_t write_signed(struct bt_conn *conn, const struct bt_gatt_attr *att
 	if (offset + len > sizeof(signed_value)) {
 		return BT_GATT_ERR(BT_ATT_ERR_INVALID_OFFSET);
 	}
-	printk("Writing signed value\n");
+	
 	memcpy(value + offset, buf, len);
-
-	return len;
+	printk("Writing signed value. Value: %d\n",*value);
+	return len;	
 }
 
 /* Vendor Primary Service Declaration */
 BT_GATT_SERVICE_DEFINE(primary_service,
 	BT_GATT_PRIMARY_SERVICE(&primary_service_uuid),
-	BT_GATT_CHARACTERISTIC(&read_characteristic_uuid.uuid,
+	BT_GATT_CHARACTERISTIC(&read_charac_uuid.uuid,
 			       BT_GATT_CHRC_READ,
 			       BT_GATT_PERM_READ,
 			       read_signed, NULL, NULL),
-	BT_GATT_CHARACTERISTIC(&write_characteristic_uuid.uuid,
+	BT_GATT_CHARACTERISTIC(&write_charac_uuid.uuid,
 			       BT_GATT_CHRC_WRITE,
 			       BT_GATT_PERM_WRITE_ENCRYPT,
 			       NULL, write_signed, NULL),
-	BT_GATT_CHARACTERISTIC(&custom_characteristic_uuid.uuid,
+	BT_GATT_CHARACTERISTIC(&custom_charac_uuid.uuid,
 					BT_GATT_CHRC_READ,
 					BT_GATT_PERM_READ,
 					read_signed,NULL,NULL),
 );
 
-BT_GATT_SERVICE_DEFINE(zservice,
-	BT_GATT_PRIMARY_SERVICE(&zervice_uuid),
-	BT_GATT_CHARACTERISTIC(&zeder_read_characteristic_uuid.uuid,
+BT_GATT_SERVICE_DEFINE(zproject_service,
+	BT_GATT_PRIMARY_SERVICE(&zproject_service_uuid),
+	BT_GATT_CHARACTERISTIC(&zproject_read_charac_uuid.uuid,
 			       BT_GATT_CHRC_READ,
 			       BT_GATT_PERM_READ,
 			       read_signed, NULL, NULL),
+	BT_GATT_CHARACTERISTIC(&zproject_write_charac_uuid.uuid,
+			       BT_GATT_CHRC_WRITE,
+			       BT_GATT_PERM_WRITE_ENCRYPT,
+			       NULL, write_signed, NULL),
+	BT_GATT_CHARACTERISTIC(&zproject_notify_charac_uuid.uuid,
+			       BT_GATT_CHRC_NOTIFY,
+			       BT_GATT_PERM_WRITE_ENCRYPT,
+			       NULL, write_signed, NULL),
+	BT_GATT_CHARACTERISTIC(&zproject_indicate_charac_uuid.uuid,
+			       BT_GATT_CHRC_INDICATE,
+			       BT_GATT_PERM_WRITE_ENCRYPT,
+			       NULL, write_signed, NULL),
 );
 
 static const struct bt_data sd[] = {
@@ -142,6 +160,7 @@ static void	bt_ready(void)
 	}
 
 	bond_count = 0;
+	
 	bt_foreach_bond(BT_ID_DEFAULT, add_bonded_addr_to_filter_list, NULL);
 
 	adv_param = *BT_LE_ADV_CONN_NAME;

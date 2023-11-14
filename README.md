@@ -14,6 +14,16 @@ west init ~/zephyrproject
 cd ~/zephyrproject
 west update
 ```
+
+Change zephyr git version
+
+
+Current I'm use zephyr version 3.5 stable
+
+https://github.com/zephyrproject-rtos/zephyr/tree/v3.5-branch
+
+
+---
 Export a Zephyr CMake package. This allows CMake to automatically load boilerplate code required for building Zephyr applications.
 
 ```Bash
