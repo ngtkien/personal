@@ -2,6 +2,7 @@
 
 
 #include "bluetooth_adv.h"
+#include "adc.h"
 static int count = 0;
 /* Custom Service Variables */
 #define BT_UUID_CUSTOM_SERVICE_VAL \
@@ -48,6 +49,9 @@ static ssize_t read_signed(struct bt_conn *conn, const struct bt_gatt_attr *attr
 	int *value = &signed_value;
 	count++;
 	*value = count;
+
+	int adc_val = esp_adc_read(1);
+	*value = adc_val;
 	printk("Reading signed value\n,value: %d, offset: %d, len: %d\n",*value, offset, len);
 
 	return bt_gatt_attr_read(conn, attr, buf, len, offset, value,
