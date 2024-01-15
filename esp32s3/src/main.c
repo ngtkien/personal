@@ -27,10 +27,12 @@ LOG_MODULE_REGISTER(main);
 #include "led_strip.h"
 #include "bluetooth_adv.h"
 #include "adc.h"
+#include "RA8875.h"
 
 #define DELAY_TIME K_MSEC(100)
 
 
+static RA8875_struct ra8875;
 
 int	main(void)
 {
@@ -41,7 +43,7 @@ int	main(void)
 	bluetooth_init(); // Call the bluetooth_init() function
 	adc_init();
 
-
+	RA8875_begin(&ra8875, RA8875_800x480, 16);
 
 
 	counter = 0;

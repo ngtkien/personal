@@ -28,6 +28,29 @@
 	};
 };
 
+&spi2 {
+	status = "okay";
+	compatible = "espressif,esp32-spi";
+	pinctrl-0 = <&spim2_default>;
+
+	pinctrl-names = "default";
+	cs-gpios = <&gpio0 10 GPIO_ACTIVE_LOW>;
+
+
+	ra8875: ra8875@0 {
+		compatible = "worldsemi,ra8875";
+		status = "okay";
+        spi-max-frequency = <4000000>;
+        reg = <0>;
+        width = <800>;
+        height = <480>;
+		rotation = <0>;
+        // bl-gpios = <&gpio1 6 GPIO_ACTIVE_HIGH>;
+        reset-gpios = <&gpio0 14 GPIO_ACTIVE_HIGH>;
+        // dc-gpios = <&gpio0 7 GPIO_ACTIVE_HIGH>;
+	};
+};
+
 &pinctrl {
 	spim3_default: spim3_default {
 		group2 {
@@ -42,9 +65,30 @@
                 <&adc0 0>,
                 <&adc1 0>;
         };
+
         aliases {
                 led-strip = &led_strip;
+				ra8875-rs = &ra8875_rs;
         };
+
+		buttons {
+			compatible = "gpio-keys";
+			status = "okay";
+			button0: button_0 {
+				gpios = <&gpio0 0 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+				label = "BOOT Button";
+				zephyr,code = <INPUT_KEY_0>;
+			};
+		};
+
+		gpio_keys {
+			compatible = "gpio-keys";
+			status = "okay";
+			ra8875_rs: ra8875_14 {
+				gpios = <&gpio0 14 (GPIO_PULL_UP | GPIO_ACTIVE_HIGH)>;
+				label = "RA8875 CS";
+			};
+		};
 };
 
 &adc0 {

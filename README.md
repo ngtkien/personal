@@ -65,3 +65,7 @@ cd ~/zephyrproject
 west build -b [your board name] ./personal/esp32s3
 
 ```
+
+# Document for ESP32-S3
+
+https://docs.espressif.com/projects/esp-idf/en/latest/esp32s3/hw-reference/esp32s3/user-guide-devkitc-1.html
